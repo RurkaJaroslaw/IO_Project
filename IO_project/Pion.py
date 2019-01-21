@@ -1,16 +1,14 @@
 class PustePole():
-    def __init__(self, text="", bg="black", fg="white", row=0, column=0, height=4, width=8):
+    def __init__(self, text="", row=0, column=0, height=4, width=8):
         self.text = text
         self.row = row
         self.column = column
-        self.bg = bg
-        self.fg = fg
         self.height = height
         self.width = width
 
 class Pionek(PustePole):
-    def __init__(self, text="", bg="black", fg="white", row=0, column=0, height=4, width=8, player=1):
-        super().__init__(text, bg, fg, row, column, height, width)
+    def __init__(self, text="", row=0, column=0, height=4, width=8, player=1):
+        super().__init__(text, row, column, height, width)
         self.__beating = False
         self.player = player
     mabicie1 = False
@@ -40,8 +38,8 @@ class Pionek(PustePole):
         return None
 
 class ZwyklyPionek(Pionek):
-    def __init__(self, text="Pb", bg="black", fg="white", row=0, column=0, height=4, width=8, player=1):
-        super().__init__(text, bg, fg, row, column, height, width, player)
+    def __init__(self, text="Pb", row=0, column=0, height=4, width=8, player=1):
+        super().__init__(text, row, column, height, width, player)
 
     def czy_ruch(self, clicked, board):
         #srawdzamy czy nasz pionek moze sie ruszyc w dane klikniete miejsce badajac rundę
@@ -101,8 +99,8 @@ class ZwyklyPionek(Pionek):
 
 
 class Damka(Pionek):
-    def __init__(self, text="PbD", bg="black", fg="white", row=0, column=0, height=4, width=8, player=1):
-        super().__init__(text, bg, fg, row, column, height, width, player)
+    def __init__(self, text="PbD", row=0, column=0, height=4, width=8, player=1):
+        super().__init__(text, row, column, height, width, player)
 
     def czy_ruch(self, clicked, board):
         #srawdzamy czy nasza damka moze sie ruszyc w dane klikniete miejsce badajac rundę

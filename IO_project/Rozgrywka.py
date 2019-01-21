@@ -12,21 +12,18 @@ class Rozgrywka:
         self.__pionki_gracza2 = 12
         self.__reset = False
 
-    def add_manager(self, manager):
-        self.__manager = manager
-
     def utworz_plansze(self):
         self.__board = [["bc"[(i + j + self.__n % 2 + 1) % 2] for i in range(self.__n)] for j in range(self.__n)]
         for x in range(0, self.__n, 1):
             for y in range(0, self.__n, 1):
                 if x in range(0, 3, 1) and self.__board[x][y] == 'c':
-                    self.__board[x][y] = ZwyklyPionek(text='Pb', bg='black', fg='white', row=x, column=y, player=1)
+                    self.__board[x][y] = ZwyklyPionek(text='Pb', row=x, column=y, player=1)
                 elif x in range(5, 8, 1) and self.__board[x][y] == 'c':
-                    self.__board[x][y] = ZwyklyPionek(text='Pc', bg='black', fg='white', row=x, column=y, player=2)
+                    self.__board[x][y] = ZwyklyPionek(text='Pc', row=x, column=y, player=2)
                 elif self.__board[x][y] == 'c':
-                    self.__board[x][y] = PustePole(text='czarne', bg='black', row=x, column=y)
+                    self.__board[x][y] = PustePole(text='czarne', row=x, column=y)
                 else:
-                    self.__board[x][y] = PustePole(text='biale', bg='white', row=x, column=y)
+                    self.__board[x][y] = PustePole(text='biale', row=x, column=y)
         return self.__board
 
     def select_button(self, r, c):
@@ -109,7 +106,7 @@ class Rozgrywka:
         if type(first) is ZwyklyPionek:
             r = int((first.row + second.row) / 2)
             c = int((first.column + second.column) / 2)
-            p = PustePole(text="czarne", bg="black", fg="white", row=r, column=c)
+            p = PustePole(text="czarne", row=r, column=c)
             self.__board[r][c] = p
             self.__manager.update_button(p)
         elif type(first) is Damka:
@@ -156,7 +153,7 @@ class Rozgrywka:
                         break
                     tmprow = tmprow + 1
                     tmpcolumn = tmpcolumn + 1
-            p = PustePole(text="czarne", bg="black", fg="white", row=p.row, column=p.column)
+            p = PustePole(text="czarne", row=p.row, column=p.column)
             self.__board[p.row][p.column] = p
             self.__manager.update_button(p)
         self.odwroc_pola(first, second)
@@ -206,36 +203,35 @@ class Rozgrywka:
         for x in range(0, self.__n, 1):
             for y in range(0, self.__n, 1):
                 if self.__board[x][y] == 'c':
-                    self.__board[x][y] = PustePole(text='czarne', bg='black', row=x, column=y)
+                    self.__board[x][y] = PustePole(text='czarne', row=x, column=y)
                 else:
-                    self.__board[x][y] = PustePole(text='biale', bg='white', row=x, column=y)
-        if number == 4:
-            self.__board[1][1] = ZwyklyPionek(text='Pb', bg='black', fg='white', row=1, column=1, player=1)
+                    self.__board[x][y] = PustePole(text='biale', row=x, column=y)
+        if number == 'test':
+            self.__board[1][1] = ZwyklyPionek(text='Pb', row=1, column=1, player=1)
             self.__board[1][1].niejest_bicie()
-            self.__board[3][3] = ZwyklyPionek(text='Pb', bg='black', fg='black', row=3, column=3, player=1)
+            self.__board[3][3] = ZwyklyPionek(text='Pb', row=3, column=3, player=1)
             self.__board[3][3].niejest_bicie()
-            self.__board[4][4] = ZwyklyPionek(text='Pc', bg='black', fg='black', row=4, column=4, player=2)
+            self.__board[4][4] = ZwyklyPionek(text='Pc', row=4, column=4, player=2)
             self.__board[4][4].jest_bicie()
-            self.__board[2][4] = ZwyklyPionek(text='Pb', bg='black', fg='black', row=2, column=4, player=1)
+            self.__board[2][4] = ZwyklyPionek(text='Pb', row=2, column=4, player=1)
             self.__board[2][4].niejest_bicie()
+            self.__board[2][6] = ZwyklyPionek(text='Pc', row=2, column=6, player=2)
+            self.__board[2][6].niejest_bicie()
+
             Pionek.mabicie1 = True
             Pionek.mabicie2 = False
             self.__turaGracza = 2
             self.__pionki_gracza1 = 3
-            self.__pionki_gracza2 = 1
+            self.__pionki_gracza2 = 2
 
-        self.__manager.plansza_testowa(self.__board)
-        if self.__turaGracza == 2:
-            self.__manager.zmiana_tury()
-        # manager wysyla informacje o kliknieciu, ustawiamy zmienne rozgrywki tworzymy odpowiedni board i wysylamy do funkcji plansza testowa
-
+       
     def reset_gry(self):  #zwykly reset gry
         if self.__selected_button is not None:
             self.__selected_button = None
         self.__turaGracza = 1
         self.__pionki_gracza1 = 12
         self.__pionki_gracza2 = 12
-        self.__manager.reset()
+       
         self.__reset = True
         Pionek.mabicie1 = False
         Pionek.mabicie2 = False
@@ -249,17 +245,17 @@ class Rozgrywka:
         Pionek.mabicie1 = False
         Pionek.mabicie2 = False
 
-
 class Game:
     def __init__(self):
         self.__widok = Widok()
         self.__rozgrywka = Rozgrywka()
-        self.__manager = Manager(self.__widok, self.__rozgrywka)
-        self.__widok.add_manager(self.__manager)
-        self.__rozgrywka.add_manager(self.__manager)
-
+        
     def start(self):
-        self.__manager.start()
+        board = self.__rozgrywka.utworz_plansze()
+        self.__widok.utworz_okno()
+        self.__widok.obiekty_graficzne(board, n=8)
+        self.__widok.start_loop()
+
 
 game = Game()
 game.start()

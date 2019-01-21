@@ -8,6 +8,9 @@ class Widok(tk.Frame):
         super().__init__(self.__mainWindow)
         self.__manager = None
 
+        self.__buttons = None
+        self.__clicked_button = None
+
         # wczytanie grafik do programu
         self.__pionekb = tk.PhotoImage(file="pionekb.gif")
         self.__damab = tk.PhotoImage(file="damab.gif")
@@ -20,40 +23,36 @@ class Widok(tk.Frame):
         self.__polec = tk.PhotoImage(file="kratkac.gif")
         self.__poleb = tk.PhotoImage(file="kratkab.gif")
 
-        self.__tura = None
-        self.__koniecGry = None
-        self.__test = None
-        self.__buttons = None
-        self.__clicked_button = None
 
-
-    def utworz_okno(self, width=540, height=480, title='PROJEKT WARCABY'):
-        self.__mainWindow.geometry('{}x{}'.format(width, height))
+    def utworz_okno(self, title='PROJEKT WARCABY'):
+        self.__mainWindow.geometry('540x480')
         self.winfo_toplevel().title(title)
-
-    def utworz_plansze(self, board, n):
         self.pack()
-        self.obiekty_graficzne(board, n)
 
-    def obiekty_graficzne(self, board, n):
+    def obiekty_graficzne(self, board, n):   #board /// rozgrywka.utworz_plansze
+        rightFrame = tk.Frame(self.__mainWindow)
+        rightFrame.pack(side='right', anchor='ne')
+
+        #przycisk dla rozpoczecia nowej gry
+        self.__odNowa = tk.Button(rightFrame, text="Zacznij gre od nowa", command=self.__manager.od_nowa, font=(None, 28))
+        self.__odNowa.grid(row=1, column=5)
+
+        #przycisk dla rozgrywki testowej
+        self.__test = tk.Button(rightFrame, text="TESTY", command=lambda n='test': self.__manager.clicked_test(n), font=(None, 28))
+        self.__test.grid(row=1, column=6)
+
+        #tekst informujacy o turze gracza
+        self.__tura = tk.Label(self, text="Tura gracza 1", fg="blue", font=(None , 12))
+        self.__tura.grid(row=0, column=8)
+
+        #
         self.__buttons = [[0 for i in range(n)] for i in range(n)]
         for x in range(0, n, 1):
             for y in range(0, n, 1):
                 tmp = board[x][y]
                 img = self.wybierz_obrazek(tmp.text)
-                self.__buttons[x][y] = tk.Button(self, text=tmp.text, command=lambda row=tmp.row, column=tmp.column: self.clicked(row, column), bg=tmp.bg, fg=tmp.fg, image=img, compound='none')
-                buf = self.__buttons[x][y]
-                buf.grid(row=tmp.row, column=tmp.column)
-
-        rightFrame = tk.Frame(self.__mainWindow)
-        rightFrame.pack(side='right', anchor='ne')
-
-        self.__odNowa = tk.Button(rightFrame, text="Zacznij gre od nowa", command=self.__manager.od_nowa, font=(None, 28))
-        self.__odNowa.grid(row=1, column=5)
-        self.__test = tk.Button(rightFrame, text="TESTY", command=lambda n=4: self.__manager.clicked_test(n), font=(None, 28))
-        self.__test.grid(row=1, column=6)
-        self.__tura = tk.Label(self, text="Tura gracza 1", fg="blue", font=(None , 12))
-        self.__tura.grid(row=0, column=8)
+                self.__buttons[x][y] = tk.Button(self, text=tmp.text, command=lambda row=tmp.row, column=tmp.column: self.clicked(row,column), image=img, compound='none')
+                self.__buttons[x][y].grid(row=tmp.row, column=tmp.column)
 
 
     def start_loop(self):
@@ -91,7 +90,7 @@ class Widok(tk.Frame):
     def update_button(self, tmp):
         img = self.wybierz_obrazek(tmp.text)
         self.__buttons[tmp.row][tmp.column].destroy()
-        self.__buttons[tmp.row][tmp.column] = tk.Button(self, text=tmp.text, command=lambda row=tmp.row, column=tmp.column: self.clicked(row, column), bg=tmp.bg, fg=tmp.fg, image=img, compound='none')
+        self.__buttons[tmp.row][tmp.column] = tk.Button(self, text=tmp.text, command=lambda row=tmp.row, column=tmp.column: self.clicked(row, column), image=img, compound='none')
         buf = self.__buttons[tmp.row][tmp.column]
         buf.grid(row=tmp.row, column=tmp.column)
         buf.update()
@@ -114,7 +113,7 @@ class Widok(tk.Frame):
             for y in range(0, n, 1):
                 tmp = board[x][y]
                 img = self.wybierz_obrazek(tmp.text)
-                self.__buttons[x][y] = tk.Button(self, text=tmp.text, command=lambda row=tmp.row, column=tmp.column: self.clicked(row, column), bg=tmp.bg, fg=tmp.fg, image=img, compound='none')
+                self.__buttons[x][y] = tk.Button(self, text=tmp.text, command=lambda row=tmp.row, column=tmp.column: self.clicked(row, column), image=img, compound='none')
                 buf = self.__buttons[x][y]
                 buf.grid(row=tmp.row, column=tmp.column)
         self.__tura.destroy()
