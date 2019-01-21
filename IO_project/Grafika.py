@@ -8,14 +8,6 @@ class Widok(tk.Frame):
         super().__init__(self.__mainWindow)
         self.__manager = None
 
-        self.__tura = None
-        self.__koniecGry = None
-        self.__test = None
-
-        self.__buttons = None
-        self.__clicked_button = None
-
-
         # wczytanie grafik do programu
         self.__pionekb = tk.PhotoImage(file="pionekb.gif")
         self.__damab = tk.PhotoImage(file="damab.gif")
@@ -27,6 +19,12 @@ class Widok(tk.Frame):
         self.__damacz = tk.PhotoImage(file="damacz.gif")
         self.__polec = tk.PhotoImage(file="kratkac.gif")
         self.__poleb = tk.PhotoImage(file="kratkab.gif")
+
+        self.__tura = None
+        self.__koniecGry = None
+        self.__test = None
+        self.__buttons = None
+        self.__clicked_button = None
 
 
     def utworz_okno(self, width=540, height=480, title='PROJEKT WARCABY'):
@@ -56,7 +54,6 @@ class Widok(tk.Frame):
         self.__test.grid(row=1, column=6)
         self.__tura = tk.Label(self, text="Tura gracza 1", fg="blue", font=(None , 12))
         self.__tura.grid(row=0, column=8)
-
 
 
     def start_loop(self):
