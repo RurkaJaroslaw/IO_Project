@@ -27,5 +27,3 @@ class Controller:
     def zmiana_tury(self):
         self.__widok.zmiana_tury()
 
-    def clicked_test(self, number):
-        self.__rozgrywka.plansza_testowa(number)
